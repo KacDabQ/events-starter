@@ -5,4 +5,5 @@ export default interface EventI {
   date: string;
   url: string;
   price: number;
+  city?: string;
 }

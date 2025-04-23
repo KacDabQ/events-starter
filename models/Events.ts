@@ -21,6 +21,10 @@ const EventSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  city: {
+    type: String,
+    required: false,
+  },
 });
 
 export default mongoose.models.Events || mongoose.model("Events", EventSchema);
