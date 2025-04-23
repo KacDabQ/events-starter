@@ -30,16 +30,16 @@ export default function Dashboard() {
 
   return (
     <div>
-      {events.map((event: EventI) => (
-        <Item key={event._id} event={event} />
-      ))}
       <div
-        className="bg-white border-4 cursor-pointer border-[#b32e2e] rounded-full p-4 w-fit"
+        className="bg-white border-4 cursor-pointer border-[#b32e2e] rounded-full p-4 w-fit m-4"
         onClick={togglePopup}
       >
         <Image src={Plus} alt="add icon" width={40} height={40} />
       </div>
       {popup && <Form togglePopup={togglePopup} />}
+      {events.map((event: EventI) => (
+        <Item key={event._id} event={event} />
+      ))}
     </div>
   );
 }

@@ -16,6 +16,7 @@ export default function Form(props: { togglePopup: Function }) {
       date: "",
       url: "",
       price: "",
+      city: "",
     };
 
     const form = e.target as HTMLFormElement;
@@ -25,6 +26,7 @@ export default function Form(props: { togglePopup: Function }) {
     event.date = (form[2] as HTMLInputElement).value;
     event.url = (form[3] as HTMLInputElement).value;
     event.price = (form[4] as HTMLInputElement).value;
+    event.city = (form[5] as HTMLInputElement).value;
 
     await axios.post("/api/dashboard/add-event", { event });
   };
@@ -55,6 +57,7 @@ export default function Form(props: { togglePopup: Function }) {
           placeholder="Link do wydarzenia"
         />
         <input className={input_styles} type="text" placeholder="Cena" />
+        <input className={input_styles} type="text" placeholder="Miasto" />
 
         <button
           type="submit"
