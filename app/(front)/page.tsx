@@ -7,12 +7,12 @@ import EventI from "@/types/event";
 import { set } from "mongoose";
 
 export default function Front() {
-  const [filteredEvents, setFilteredEvents] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState<EventI[]>([]);
+  const [events, setEvents] = useState<EventI[]>([]);
   const getEvents = async () => {
     const res = await axios.get("/api/dashboard/get-events");
 
-    console.log(res.data.events);
+    console.log("events", res.data.events);
 
     setEvents(res.data.events);
     setFilteredEvents(res.data.events);
@@ -34,7 +34,7 @@ export default function Front() {
       setFilteredEvents(events);
       return;
     }
-    setFilteredEvents(events.filter((event: EventI) => event.city === city));
+    setFilteredEvents(events.filter((event) => event.city === city));
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export default function Front() {
           ))}
         </select>
       </div>
-      {filteredEvents.map((event: EventI) => (
+      {filteredEvents.map((event) => (
         <Item key={event._id} event={event} />
       ))}
     </div>
