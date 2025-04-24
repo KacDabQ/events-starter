@@ -25,6 +25,8 @@ export default function Form({ editedEvent, togglePopup }: Props) {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const isEditing = editedEvent !== null;
+
     const event = {
       name: "",
       desc: "",
@@ -58,7 +60,11 @@ export default function Form({ editedEvent, togglePopup }: Props) {
       event.city = cityRef.current.value;
     }
 
-    await axios.post("/api/dashboard/add-event", { event });
+    if (isEditing) {
+      await axios.post("/api/dashboard/edit-event", { event });
+    } else {
+      await axios.post("/api/dashboard/add-event", { event });
+    }
   };
 
   useEffect(() => {
