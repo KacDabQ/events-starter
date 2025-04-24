@@ -34,6 +34,7 @@ export async function POST(
 
     return NextResponse.json<ResponseData>({ success: true });
   } catch (error) {
-    return NextResponse.json<ResponseData>({ success: false });
+    console.error("Error updating event:", error);
+    return NextResponse.json<ResponseData>({ success: false }, { status: 500 });
   }
 }
