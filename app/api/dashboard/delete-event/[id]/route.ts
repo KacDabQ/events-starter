@@ -6,19 +6,28 @@ type ResponseData = {
   success: boolean;
 };
 
-export async function POST({ params }: { params: { id: string } }) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
+    console.log("params", params);
     await connect();
-    const eventFromDb = await Events.findById(params.id);
+    console.log("connected to db");
+    const eventFromDb = await Events.findByIdAndDelete(params.id);
 
     if (!eventFromDb) {
-      return NextResponse.json<ResponseData>({ success: false });
+      return NextResponse.json<ResponseData>(
+        { success: false },
+        { status: 404 }
+      );
     }
 
-    await eventFromDb.delete();
+    console.log("deleted eventFromDb", eventFromDb);
 
     return NextResponse.json<ResponseData>({ success: true });
   } catch (error) {
-    return NextResponse.json<ResponseData>({ success: false });
+    console.error("Error deleting event:", error);
+    return NextResponse.json<ResponseData>({ success: false }, { status: 500 });
   }
 }

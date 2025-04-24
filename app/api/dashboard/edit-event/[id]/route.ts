@@ -18,7 +18,10 @@ export async function POST(
     const eventFromDb = await Events.findById(params.id);
 
     if (!eventFromDb) {
-      return NextResponse.json<ResponseData>({ success: false });
+      return NextResponse.json<ResponseData>(
+        { success: false },
+        { status: 404 }
+      );
     }
 
     eventFromDb.name = event.name;

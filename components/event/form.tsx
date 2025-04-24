@@ -22,6 +22,14 @@ export default function Form({ editedEvent, togglePopup }: Props) {
 
   console.log("editedEvent", editedEvent);
 
+  const deleteEvent = async () => {
+    if (editedEvent) {
+      await axios.post("/api/dashboard/delete-event/" + editedEvent._id);
+
+      togglePopup();
+    }
+  };
+
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -61,10 +69,14 @@ export default function Form({ editedEvent, togglePopup }: Props) {
     }
 
     if (isEditing) {
-      await axios.post("/api/dashboard/edit-event", { event });
+      await axios.post("/api/dashboard/edit-event/" + editedEvent._id, {
+        event,
+      });
     } else {
       await axios.post("/api/dashboard/add-event", { event });
     }
+
+    togglePopup();
   };
 
   useEffect(() => {
@@ -142,6 +154,15 @@ export default function Form({ editedEvent, togglePopup }: Props) {
         >
           {editedEvent ? "Zapisz" : "Dodaj"}
         </button>
+        {editedEvent && (
+          <button
+            type="button"
+            className="cursor-pointer p-2 bg-red-900 hover:bg-red-800"
+            onClick={deleteEvent}
+          >
+            Usun
+          </button>
+        )}
       </form>
     </div>
   );
