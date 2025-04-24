@@ -11,6 +11,7 @@ import EventI from "@/types/event";
 export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [popup, setPopup] = useState(false);
+  const [editedEvent, setEditedEvent] = useState<EventI | null>(null);
 
   const getEvents = async () => {
     const res = await axios.get("/api/dashboard/get-events");
@@ -18,6 +19,16 @@ export default function Dashboard() {
     console.log(res.data.events);
 
     setEvents(res.data.events);
+  };
+
+  const handleEventClicked = (event: EventI) => {
+    setEditedEvent(event);
+    setPopup(true);
+  };
+
+  const handleAddEventClicked = () => {
+    setEditedEvent(null);
+    togglePopup();
   };
 
   useEffect(() => {
@@ -31,14 +42,19 @@ export default function Dashboard() {
   return (
     <div>
       <div
+        id="add-event"
         className="bg-white border-4 cursor-pointer border-[#b32e2e] rounded-full p-4 w-fit m-4"
-        onClick={togglePopup}
+        onClick={handleAddEventClicked}
       >
         <Image src={Plus} alt="add icon" width={40} height={40} />
       </div>
-      {popup && <Form togglePopup={togglePopup} />}
+      {popup && <Form togglePopup={togglePopup} editedEvent={editedEvent} />}
       {events.map((event: EventI) => (
-        <Item key={event._id} event={event} />
+        <Item
+          key={event._id}
+          event={event}
+          onEventClicked={handleEventClicked}
+        />
       ))}
     </div>
   );
