@@ -5,11 +5,22 @@ import axios from "axios";
 import EventI from "@/types/event";
 
 interface Props {
+  isAdmin: boolean;
   editedEvent: EventI | null;
   togglePopup: Function;
+  eventDeleted?: Function;
+  eventEdited?: Function;
+  eventAdded?: Function;
 }
 
-export default function Form({ editedEvent, togglePopup }: Props) {
+export default function Form({
+  isAdmin,
+  editedEvent,
+  togglePopup,
+  eventDeleted,
+  eventAdded,
+  eventEdited,
+}: Props) {
   const nameRef = useRef<HTMLInputElement>(null);
   const descRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
@@ -21,10 +32,14 @@ export default function Form({ editedEvent, togglePopup }: Props) {
     "p-2 border border-white text-white outline-none mb-2 invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500";
 
   console.log("editedEvent", editedEvent);
+  console.log("isAdmin", isAdmin);
 
   const deleteEvent = async () => {
     if (editedEvent) {
       await axios.post("/api/dashboard/delete-event/" + editedEvent._id);
+      if (eventDeleted) {
+        eventDeleted(editedEvent._id);
+      }
 
       togglePopup();
     }
@@ -72,8 +87,15 @@ export default function Form({ editedEvent, togglePopup }: Props) {
       await axios.post("/api/dashboard/edit-event/" + editedEvent._id, {
         event,
       });
+
+      if (eventEdited) {
+        eventEdited(event);
+      }
     } else {
       await axios.post("/api/dashboard/add-event", { event });
+      if (eventAdded) {
+        eventAdded(event);
+      }
     }
 
     togglePopup();
@@ -154,7 +176,7 @@ export default function Form({ editedEvent, togglePopup }: Props) {
         >
           {editedEvent ? "Zapisz" : "Dodaj"}
         </button>
-        {editedEvent && (
+        {editedEvent && isAdmin && (
           <button
             type="button"
             className="cursor-pointer p-2 bg-red-900 hover:bg-red-800"

@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import EventI from "@/types/event";
 
-export default function Dashboard() {
+interface Props {
+  isAdmin: boolean;
+}
+
+export default function Dashboard({ isAdmin }: Props) {
   const [events, setEvents] = useState([]);
   const [popup, setPopup] = useState(false);
   const [editedEvent, setEditedEvent] = useState<EventI | null>(null);
@@ -48,7 +52,16 @@ export default function Dashboard() {
       >
         <Image src={Plus} alt="add icon" width={40} height={40} />
       </div>
-      {popup && <Form togglePopup={togglePopup} editedEvent={editedEvent} />}
+      {popup && (
+        <Form
+          isAdmin={isAdmin}
+          togglePopup={togglePopup}
+          editedEvent={editedEvent}
+          eventAdded={getEvents}
+          eventDeleted={getEvents}
+          eventEdited={getEvents}
+        />
+      )}
       {events.map((event: EventI) => (
         <Item
           key={event._id}
